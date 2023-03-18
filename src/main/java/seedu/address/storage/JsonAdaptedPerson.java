@@ -10,13 +10,10 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import seedu.address.commons.exceptions.IllegalValueException;
-import seedu.address.model.appointment.Appointment;
 import seedu.address.model.person.Address;
-import seedu.address.model.person.Doctor;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Nric;
-import seedu.address.model.person.Patient;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
 import seedu.address.model.tag.Tag;
@@ -43,8 +40,7 @@ class JsonAdaptedPerson {
     public JsonAdaptedPerson(@JsonProperty("name") String name, @JsonProperty("phone") String phone,
             @JsonProperty("email") String email, @JsonProperty("nric") String nric, @JsonProperty("address") String
                                          address,
-            @JsonProperty("tagged") List<JsonAdaptedTag> tagged,
-            @JsonProperty("patientAppointments") ArrayList<JsonAdaptedAppointment> patientAppointments) {
+            @JsonProperty("tagged") List<JsonAdaptedTag> tagged) {
         this.name = name;
         this.phone = phone;
         this.email = email;
@@ -52,9 +48,6 @@ class JsonAdaptedPerson {
         this.address = address;
         if (tagged != null) {
             this.tagged.addAll(tagged);
-        }
-        if (patientAppointments != null) {
-            this.patientAppointments.addAll(patientAppointments);
         }
     }
 
@@ -70,17 +63,6 @@ class JsonAdaptedPerson {
         tagged.addAll(source.getTags().stream()
                 .map(JsonAdaptedTag::new)
                 .collect(Collectors.toList()));
-
-        if (source.isPatient()) {
-            Patient sourcePatient = (Patient) source;
-            patientAppointments.addAll(sourcePatient.getPatientAppointments().stream()
-                    .map(JsonAdaptedAppointment::new)
-                    .collect(Collectors.toList()));
-        }
-
-        if (source.isDoctor()) {
-            Doctor sourceDoctor = (Doctor) source;
-        }
     }
 
     /**
@@ -93,10 +75,7 @@ class JsonAdaptedPerson {
         for (JsonAdaptedTag tag : tagged) {
             personTags.add(tag.toModelType());
         }
-        final ArrayList<Appointment> appointments = new ArrayList<>();
-        for (JsonAdaptedAppointment appointment : patientAppointments) {
-            appointments.add(appointment.toModelType());
-        }
+
         if (name == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Name.class.getSimpleName()));
         }
@@ -140,8 +119,7 @@ class JsonAdaptedPerson {
 
         final Set<Tag> modelTags = new HashSet<>(personTags);
 
-        final ArrayList<Appointment> modelAppointments = new ArrayList<>(appointments);
-        return new Patient(modelName, modelPhone, modelEmail, modelNric, modelAddress, modelTags, modelAppointments);
+        return new Person(modelName, modelPhone, modelEmail, modelNric, modelAddress, modelTags);
     }
     // todo this should be for JsonAdaptedPatient, create another for JsonAdaptedDoctor
 }

@@ -11,7 +11,11 @@ import com.fasterxml.jackson.annotation.JsonRootName;
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.AddressBook;
 import seedu.address.model.ReadOnlyAddressBook;
+import seedu.address.model.person.Doctor;
+import seedu.address.model.person.Patient;
 import seedu.address.model.person.Person;
+
+import javax.print.Doc;
 
 /**
  * An Immutable AddressBook that is serializable to JSON format.
@@ -37,7 +41,11 @@ class JsonSerializableAddressBook {
      * @param source future changes to this will not affect the created {@code JsonSerializableAddressBook}.
      */
     public JsonSerializableAddressBook(ReadOnlyAddressBook source) {
-        persons.addAll(source.getPersonList().stream().map(JsonAdaptedPerson::new).collect(Collectors.toList()));
+        //persons.addAll(source.getPersonList().stream().map(JsonAdaptedPerson::new).collect(Collectors.toList()));
+        persons.addAll(source.getPersonList().stream().filter(person -> person instanceof Patient)
+                .map(JsonAdaptedPatient::new).collect(Collectors.toList()));
+        persons.addAll(source.getPersonList().stream().filter(person -> person instanceof Doctor)
+                .map(JsonAdaptedDoctor::new).collect(Collectors.toList()));
     }
 
     /**
@@ -47,6 +55,7 @@ class JsonSerializableAddressBook {
      */
     public AddressBook toModelType() throws IllegalValueException {
         AddressBook addressBook = new AddressBook();
+
         for (JsonAdaptedPerson jsonAdaptedPerson : persons) {
             Person person = jsonAdaptedPerson.toModelType();
             if (addressBook.hasPerson(person)) {
@@ -55,6 +64,32 @@ class JsonSerializableAddressBook {
             addressBook.addPerson(person);
         }
         return addressBook;
+
+
+        /*
+        for (JsonAdaptedPerson jsonAdaptedPerson : persons) {
+            Person person = jsonAdaptedPerson.toModelType();
+            if (person.isPatient()) {
+                Patient patient = (Patient) person;
+                if (addressBook.hasPatient(patient)) {
+                    throw new IllegalValueException(MESSAGE_DUPLICATE_PERSON);
+                }
+                addressBook.addPatient(patient);
+            }
+        }
+        for (JsonAdaptedPerson jsonAdaptedPerson : persons) {
+            Person person = jsonAdaptedPerson.toModelType();
+            if (person.isDoctor()) {
+                Doctor doctor = (Doctor) person;
+                if (addressBook.hasDoctor(doctor)) {
+                    throw new IllegalValueException(MESSAGE_DUPLICATE_PERSON);
+                }
+                addressBook.addDoctor(doctor);
+            }
+        }
+        return addressBook;
+
+         */
     }
 
 }
