@@ -22,16 +22,13 @@ Given below are my contributions to the project.
 * **Enhancements implemented**:
   * Add an appointment
     * Schedule an appointment for a patient with a doctor
-    * This adds an appointment to the patient's appointment list and the corresponding doctor's appointment list
       * Doctors and administrative staff can now view all the appointments (including date and doctor) lined up for the specific patient
       * Doctors and administrative staff can now view all the appointments (including date and patient) lined up for the specific doctor
   * Delete an appointment
     * Remove an appointment for a patient that was previously scheduled with a doctor
     * This removes an appointment from the patient's appointment list and the corresponding doctor's appointment list
   * Display detailed person view
-    * Display a panel of detailed information of a specified person
-      * Patient's detailed view entails personal particulars, appointments, and prescription
-      * Doctor's detailed view entails personal particulars, and appointments
+    * Display a panel of detailed information of a specified doctor/patient
     * Having all the detailed information compacted in the person list can serve to be distracting for the user, especially when the list gets very long
       * Only the Name and NRIC of the person is displayed on the person list, and the rest of the particulars are abstracted for the detailed person view
   * Enhanced UI
@@ -51,11 +48,3 @@ Given below are my contributions to the project.
 
 * **Community**:
   * Reported bugs in other team's products during PE-Dry run
-
-* **Tools**:
-  * IntelliJ IDEA
-  * Sourcetree
-  * GitHub
-  * Git
-  * SceneBuilder
-  * PlantUML
